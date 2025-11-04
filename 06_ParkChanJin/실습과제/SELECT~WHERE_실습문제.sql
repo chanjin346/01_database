@@ -328,7 +328,5 @@ FROM
     tbl_menu
 WHERE
     orderable_status = 'N'
-OR
-    menu_price < 10000
-OR
-    menu_name IN('빵%','떡%','찜%');
+   OR
+    menu_price < 10000 AND (menu_name LIKE '%빵' OR menu_name LIKE '%떡' OR menu_name LIKE '%찜');
