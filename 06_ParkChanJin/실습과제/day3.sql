@@ -112,32 +112,24 @@ ORDER BY `국가명` DESC;
     사원번호, 직원명, 급여, 부서명, 국가명, 위로금을 출력하세요.
     단, 위로금 내림차순으로 출력되도록 하세요.
  */
- SELECT
-    `사원번호`, `직원명`, `급여`, `부서명` , n.NATIONAL_NAME `국가명`
-FROM (SELECT e.EMP_ID     `사원번호`,
-             e.EMP_NAME   `직원명`,
-             e.SALARY     `급여`,
-             d.DEPT_TITLE `부서명`,
-             d.LOCATION_ID `지역코드`
-      FROM employee e
-               JOIN department d ON (e.DEPT_CODE = d.DEPT_ID)
-      )AS `직원정보`
-JOIN location l ON (직원정보.지역코드 = l.LOCAL_CODE)
-JOIN national n ON (l.NATIONAL_CODE = n.NATIONAL_CODE)
-ORDER BY `국가명` DESC;
+ -- 위로금 : 급여 + 급여 등급에 해당하는 최소금액
+SELECT
+    e.EMP_ID '사원번호',
+    e.EMP_NAME '사원명',
+    e.SALARY '급여',
+    d.DEPT_TITLE '부서명',
+    n.NATIONAL_NAME '국가명',
+    e.SALARY + s.MIN_SAL '위로금'
+FROM employee e
+JOIN department d ON(e.DEPT_CODE = d.DEPT_ID)
+JOIN location l ON(d.LOCATION_ID = l.LOCAL_CODE)
+JOIN national n ON(l.NATIONAL_CODE = n.NATIONAL_CODE)
+JOIN sal_grade s ON(e.SAL_LEVEL = s.SAL_LEVEL)
+WHERE n.NATIONAL_NAME = '러시아'
+ORDER BY 위로금 DESC;
 
 
 
 
 
 
-
-
-/*
-
-단합을 위한 사내 체육대회를 위하여 팀을 꾸리는 중입니다. 기술지원부의 대리, 인사관리부
-의 사원, 영업부(팀명에 ‘영업’이 포함되면 영업부로 봄)의 부장을 한 팀으로 묶으려고 합니
-다. 이때, 이 팀의 팀원 수를 출력하세요.
-단, UNION과 SUBQUERY를 활용하여 출력하세요.
-
-*/

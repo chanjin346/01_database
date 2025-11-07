@@ -68,7 +68,7 @@ VALUES
     ('태진아', '(1급 기밀)', 3);
 
 
--- 3번문제 DAY3에서 풀었습니다!
+
 
 
 /*
@@ -84,10 +84,53 @@ TEAM_INFO 테이블 삽입 후 조회 결과
 MEMBER_INFO 테이블 삽입 후 조회 결과
 답안1 (TEAM_INFO INSERT구문)
 답안2 (MEMBER_INFO INSERT구문)
+
+
 Q3.
 단합을 위한 사내 체육대회를 위하여 팀을 꾸리는 중입니다. 기술지원부의 대리, 인사관리부
 의 사원, 영업부(팀명에 ‘영업’이 포함되면 영업부로 봄)의 부장을 한 팀으로 묶으려고 합니
 다. 이때, 이 팀의 팀원 수를 출력하세요.
 단, UNION과 SUBQUERY를 활용하여 출력하세요.
-
 */
+SELECT
+    COUNT('job')
+FROM (
+        SELECT
+            d.DEPT_TITLE,
+            j.JOB_NAME
+        FROM
+            employee e
+        JOIN department d ON(e.DEPT_CODE = d.DEPT_ID)
+        JOIN job j ON(e.JOB_CODE = j.JOB_CODE)
+        WHERE d.DEPT_TITLE = '기술지원부' AND j.JOB_NAME = '대리'
+
+        UNION ALL
+
+        SELECT
+            d.DEPT_TITLE,
+            j.JOB_NAME
+        FROM
+            employee e
+                JOIN department d ON(e.DEPT_CODE = d.DEPT_ID)
+                JOIN job j ON(e.JOB_CODE = j.JOB_CODE)
+        WHERE d.DEPT_TITLE = '인사관리부' AND j.JOB_NAME = '사원'
+
+        UNION ALL
+
+        SELECT
+            d.DEPT_TITLE,
+            j.JOB_NAME
+        FROM
+            employee e
+                JOIN department d ON(e.DEPT_CODE = d.DEPT_ID)
+                JOIN job j ON(e.JOB_CODE = j.JOB_CODE)
+        WHERE d.DEPT_TITLE LIKE '%영업%' AND j.JOB_NAME = '부장'
+     ) AS job
+
+
+
+
+
+
+
+
